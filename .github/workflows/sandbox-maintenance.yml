@@ -1,0 +1,25 @@
+name: Sandbox maintenance
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 7 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-hygiene:
+    name: Markdown hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Markdown links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress README.md CONTRIBUTING.md
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
